@@ -63,14 +63,15 @@ public class SignInActivity extends AppCompatActivity {
             }
         });
 
-        Button buttonLogin = findViewById(R.id.button_login_fb);
+        final Button buttonLogin = findViewById(R.id.button_login_fb);
         buttonLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
+                if (AccessToken.getCurrentAccessToken() == null){
+                    LoginManager.getInstance().logInWithReadPermissions(SignInActivity.this, Arrays.asList("public_profile", "email"));
 
-
-                LoginManager.getInstance().logInWithReadPermissions(SignInActivity.this, Arrays.asList("public_profile", "email"));
+                }
 
 //                ColorDrawable customerbuttonColor = (ColorDrawable) customerButton.getBackground();
 //                if (customerbuttonColor.getColor() == getResources().getColor(R.color.colorAccent)) {
@@ -88,6 +89,12 @@ public class SignInActivity extends AppCompatActivity {
 
         callbackManager = CallbackManager.Factory.create();
         sharedPref = getSharedPreferences("MY_KEY", Context.MODE_PRIVATE);
+
+
+        final Button buttonLogout = findViewById(R.id.button_logout);
+
+        buttonLogout.setVisibility(View.GONE);
+
 
         LoginManager.getInstance().registerCallback(callbackManager,
                 new FacebookCallback<LoginResult>() {
@@ -141,7 +148,21 @@ public class SignInActivity extends AppCompatActivity {
 
             Log.d("USER", sharedPref.getAll().toString());
             buttonLogin.setText("Continue as " + sharedPref.getString("email", ""));
+            buttonLogout.setVisibility(View.VISIBLE);
+
         }
+
+
+        buttonLogout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                LoginManager.getInstance().logOut();
+                buttonLogin.setText("Login with Facebook");
+                buttonLogout.setVisibility(View.GONE);
+
+            }
+        });
+
     }
 
 
