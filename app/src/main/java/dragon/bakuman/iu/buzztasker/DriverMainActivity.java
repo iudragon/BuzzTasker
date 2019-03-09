@@ -1,34 +1,24 @@
 package dragon.bakuman.iu.buzztasker;
 
-import android.content.Context;
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.ImageView;
-import android.widget.TextView;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
+public class DriverMainActivity extends AppCompatActivity {
 
-public class CustomerMainActivity extends AppCompatActivity {
 
     private DrawerLayout mDrawerLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_customer_main);
+        setContentView(R.layout.activity_driver_main);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -37,7 +27,7 @@ public class CustomerMainActivity extends AppCompatActivity {
         actionbar.setHomeAsUpIndicator(R.drawable.ic_menu);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
-        mDrawerLayout = findViewById(R.id.drawer_layout);
+        mDrawerLayout = findViewById(R.id.drawer_layout_driver);
 
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(
@@ -53,14 +43,14 @@ public class CustomerMainActivity extends AppCompatActivity {
 
                         int id = menuItem.getItemId();
                         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-                        if (id == R.id.nav_restaurant){
+                        if (id == R.id.nav_orders){
 
-                            transaction.replace(R.id.content_frame, new RestaurantListFragment()).commit();
-                        } else if (id == R.id.nav_tray){
-                            transaction.replace(R.id.content_frame, new TrayFragment()).commit();
+//                            transaction.replace(R.id.content_frame, new RestaurantListFragment()).commit();
+                        } else if (id == R.id.nav_delivery){
+//                            transaction.replace(R.id.content_frame, new TrayFragment()).commit();
 
-                        } else if (id == R.id.nav_order){
-                            transaction.replace(R.id.content_frame, new OrderFragment()).commit();
+                        } else if (id == R.id.nav_statistic){
+//                            transaction.replace(R.id.content_frame, new OrderFragment()).commit();
 
 
                         } else if (id == R.id.nav_logout){
@@ -72,12 +62,12 @@ public class CustomerMainActivity extends AppCompatActivity {
                     }
                 });
 
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+//        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+//
+//        transaction.replace(R.id.content_frame, new RestaurantListFragment()).commit();
 
-        transaction.replace(R.id.content_frame, new RestaurantListFragment()).commit();
 
-
-        }
+    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -89,7 +79,4 @@ public class CustomerMainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-
-
 }
-
