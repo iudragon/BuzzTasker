@@ -1,8 +1,10 @@
 package dragon.bakuman.iu.buzztasker.Activities;
 
 import android.annotation.SuppressLint;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -15,6 +17,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
+
+import java.util.List;
 
 import dragon.bakuman.iu.buzztasker.AppDatabase;
 import dragon.bakuman.iu.buzztasker.Objects.Tray;
@@ -85,7 +89,7 @@ public class MealDetailActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 int qty = Integer.parseInt(labelQuantity.getText().toString());
-                insertTray(mealId, mealName, mealPrice, qty, restaurantId);
+                validateTray(mealId, mealName, mealPrice, qty, restaurantId);
 
             }
         });
@@ -147,4 +151,117 @@ public class MealDetailActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
+    @SuppressLint("StaticFieldLeak")
+    public void deleteTray(){
+
+        new AsyncTask<Void, Void, Void>(){
+
+
+            @Override
+            protected Void doInBackground(Void... voids) {
+                db.trayDao().deleteAll();
+                return null;
+            }
+        }.execute();
+    }
+
+    @SuppressLint("StaticFieldLeak")
+    public void updateTray(final int trayId, final int mealQty){
+
+        new AsyncTask<Void, Void, Void>(){
+
+            @Override
+            protected Void doInBackground(Void... voids) {
+
+                db.trayDao().updateTray(trayId, mealQty);
+                return null;
+            }
+
+
+            @Override
+            protected void onPostExecute(Void aVoid) {
+                super.onPostExecute(aVoid);
+                Toast.makeText(MealDetailActivity.this, "TRAY UPDATE", Toast.LENGTH_SHORT).show();
+                
+            }
+        }.execute();
+
+    }
+
+    @SuppressLint("StaticFieldLeak")
+    public void validateTray(final String mealId, final String mealName, final float mealPrice, final int mealQuantity, final String restaurantId){
+
+        new AsyncTask<Void, Void, String>(){
+
+            @Override
+            protected String doInBackground(Void... voids) {
+
+                List<Tray> allTray = db.trayDao().getAll();
+                if (allTray.isEmpty() || allTray.get(0).getRestaurantId().equals(restaurantId)){
+
+                    Tray tray = db.trayDao().getTray(mealId);
+                    if (tray == null){
+
+                        return "NOT_EXIST";
+                    } else{
+                        return tray.getId() + "";
+                    }
+
+                } else {
+
+                    return "DIFFERENT_RESTAURANT";
+                }
+            }
+
+            @Override
+            protected void onPostExecute(final String result) {
+                super.onPostExecute(result);
+
+                if (result.equals("DIFFERENT_RESTAURANT")){
+
+                    AlertDialog.Builder builder = new AlertDialog.Builder(MealDetailActivity.this);
+                    builder.setTitle("Start new Tray?");
+                    builder.setMessage("You are ordering from another restaurant. Would you like to clear the current tray?");
+
+                    builder.setPositiveButton("Cancel", null);
+                    builder.setNegativeButton("Yes", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            deleteTray();
+                            insertTray(mealId, mealName, mealPrice, mealQuantity, restaurantId);
+                        }
+                    });
+
+                    AlertDialog alertDialog = builder.create();
+                    alertDialog.show();
+
+                } else if (result.equals("NOT_EXIST")){
+
+                    insertTray(mealId, mealName, mealPrice, mealQuantity, restaurantId);
+
+                } else {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(MealDetailActivity.this);
+                    builder.setTitle("Add More?");
+                    builder.setMessage("Your tray already has this meal, would you like to add more?");
+
+                    builder.setPositiveButton("No", null);
+                    builder.setNegativeButton("Yes", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            updateTray(Integer.parseInt(result), mealQuantity);
+                        }
+                    });
+
+                    AlertDialog alertDialog = builder.create();
+                    alertDialog.show();
+
+
+                }
+
+            }
+        }.execute();
+
+    }
+
 }
