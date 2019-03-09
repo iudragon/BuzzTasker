@@ -1,7 +1,8 @@
 <resources>
     <string name="app_name">FoodTasker</string>
-    <string name="facebook_app_id">595892800571371</string>
-    <string name="fb_login_protocol_scheme">fb595892800571371</string>
+    <string name="facebook_app_id">410357169738614</string>
+    <string name="fb_login_protocol_scheme">fb410357169738614</string>
+
 
     <string name="API_URL">http://10.0.0.5:8000/api</string>
     <string name="CLIENT_ID">tVs0Jfp851wTS9YeZKSi40U78jmzgpw2Hbh121iJ</string>
