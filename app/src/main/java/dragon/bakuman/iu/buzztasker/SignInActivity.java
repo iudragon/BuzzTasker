@@ -10,6 +10,12 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
@@ -71,18 +77,19 @@ public class SignInActivity extends AppCompatActivity {
                 if (AccessToken.getCurrentAccessToken() == null){
                     LoginManager.getInstance().logInWithReadPermissions(SignInActivity.this, Arrays.asList("public_profile", "email"));
 
-                }
+                } else {
+                    ColorDrawable customerbuttonColor = (ColorDrawable) customerButton.getBackground();
+                    if (customerbuttonColor.getColor() == getResources().getColor(R.color.colorAccent)) {
 
-//                ColorDrawable customerbuttonColor = (ColorDrawable) customerButton.getBackground();
-//                if (customerbuttonColor.getColor() == getResources().getColor(R.color.colorAccent)) {
-//                    Intent intent = new Intent(getApplicationContext(), CustomerMainActivity.class);
-//                    startActivity(intent);
-//
-//                } else {
-//
-//                    Intent intent = new Intent(getApplicationContext(), DriverMainActivity.class);
-//                    startActivity(intent);
-//                }
+                        loginToServer(AccessToken.getCurrentAccessToken().getToken(), "customer");
+
+
+                    } else {
+
+                        loginToServer(AccessToken.getCurrentAccessToken().getToken(), "driver");
+
+                    }
+                }
             }
         });
 
@@ -131,6 +138,20 @@ public class SignInActivity extends AppCompatActivity {
                         parameters.putString("fields", "id,name,email,picture");
                         request.setParameters(parameters);
                         request.executeAsync();
+
+
+                        ColorDrawable customerbuttonColor = (ColorDrawable) customerButton.getBackground();
+                        if (customerbuttonColor.getColor() == getResources().getColor(R.color.colorAccent)) {
+
+                            loginToServer(AccessToken.getCurrentAccessToken().getToken(), "customer");
+
+
+                        } else {
+
+                            loginToServer(AccessToken.getCurrentAccessToken().getToken(), "driver");
+
+                        }
+
                     }
 
                     @Override
@@ -170,5 +191,80 @@ public class SignInActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         callbackManager.onActivityResult(requestCode, resultCode, data);
         super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    private void loginToServer(String facebookAccessToken, final String userType){
+
+        String url = "http://192.168.43.25:8000/api/social/convert-token";
+
+        JSONObject jsonBody = new JSONObject();
+        try{
+
+
+            jsonBody.put("grant_type", "convert_token");
+            jsonBody.put("client_id", "I1NXWZxhOxk7eIt33bynLEATh2xbvab6ur8mwiBW");
+            jsonBody.put("client_secret", "Li2azL9b4pBTdjCi1utdVK7W7AfgGAkCrfmLNAZtUMJr9pFMTfAb9H8MemsWhgADwPTxtX1BprzN1fPn3KAoxFSxg2AcPZJSXl6EI9NFQnChiHG41g5EIFOUv4JDftdH");
+            jsonBody.put("backend", "facebook");
+            jsonBody.put("token", facebookAccessToken);
+            jsonBody.put("user_type", userType);
+
+
+
+        } catch (JSONException e){
+
+            e.printStackTrace();
+        }
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
+                (Request.Method.POST, url, jsonBody, new Response.Listener<JSONObject>() {
+
+                    @Override
+                    public void onResponse(JSONObject response) {
+
+
+                        Log.d("LOGIN TO SERVER", response.toString());
+
+                        SharedPreferences.Editor editor = sharedPref.edit();
+
+                        try{
+
+                            editor.putString("token", response.getString("access_token"));
+
+
+                        } catch (JSONException e){
+
+                            e.printStackTrace();
+
+                        }
+
+                        editor.commit();
+
+                        if (userType.equals("customer")){
+
+
+                            Intent intent = new Intent(getApplicationContext(), CustomerMainActivity.class);
+                            startActivity(intent);
+
+
+                        } else {
+
+
+                            Intent intent = new Intent(getApplicationContext(), DriverMainActivity.class);
+                            startActivity(intent);
+
+                        }
+                    }
+                }, new Response.ErrorListener() {
+
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // TODO: Handle error
+
+                    }
+                });
+
+        RequestQueue queue = Volley.newRequestQueue(this);
+        queue.add(jsonObjectRequest);
+
     }
 }
