@@ -1,8 +1,10 @@
-package dragon.bakuman.iu.buzztasker;
+package dragon.bakuman.iu.buzztasker.Activities;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
+
+import dragon.bakuman.iu.buzztasker.R;
 
 public class MealDetailActivity extends AppCompatActivity {
 

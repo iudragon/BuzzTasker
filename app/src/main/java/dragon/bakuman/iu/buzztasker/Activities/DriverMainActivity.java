@@ -1,4 +1,4 @@
-package dragon.bakuman.iu.buzztasker;
+package dragon.bakuman.iu.buzztasker.Activities;
 
 import android.content.Context;
 import android.content.Intent;
@@ -28,6 +28,12 @@ import com.squareup.picasso.Picasso;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import dragon.bakuman.iu.buzztasker.Utils.CircleTransform;
+import dragon.bakuman.iu.buzztasker.Fragments.DeliveryFragment;
+import dragon.bakuman.iu.buzztasker.Fragments.OrderListFragment;
+import dragon.bakuman.iu.buzztasker.R;
+import dragon.bakuman.iu.buzztasker.Fragments.StatisticFragment;
 
 public class DriverMainActivity extends AppCompatActivity {
 

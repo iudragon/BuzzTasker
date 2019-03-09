@@ -1,4 +1,4 @@
-package dragon.bakuman.iu.buzztasker;
+package dragon.bakuman.iu.buzztasker.Utils;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapShader;

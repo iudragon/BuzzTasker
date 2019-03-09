@@ -1,4 +1,4 @@
-package dragon.bakuman.iu.buzztasker;
+package dragon.bakuman.iu.buzztasker.Fragments;
 
 
 import android.os.Bundle;
@@ -9,6 +9,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
+
+import dragon.bakuman.iu.buzztasker.R;
 
 
 /**

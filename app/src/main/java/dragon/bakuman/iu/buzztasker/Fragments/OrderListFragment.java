@@ -1,4 +1,4 @@
-package dragon.bakuman.iu.buzztasker;
+package dragon.bakuman.iu.buzztasker.Fragments;
 
 
 import android.content.Intent;
@@ -11,6 +11,9 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
+
+import dragon.bakuman.iu.buzztasker.Activities.MealListActivity;
+import dragon.bakuman.iu.buzztasker.R;
 
 
 /**

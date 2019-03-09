@@ -1,4 +1,4 @@
-package dragon.bakuman.iu.buzztasker;
+package dragon.bakuman.iu.buzztasker.Adapters;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -12,6 +12,10 @@ import android.widget.TextView;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+
+import dragon.bakuman.iu.buzztasker.Activities.MealListActivity;
+import dragon.bakuman.iu.buzztasker.Objects.Restaurant;
+import dragon.bakuman.iu.buzztasker.R;
 
 public class RestaurantAdapter extends BaseAdapter {
 

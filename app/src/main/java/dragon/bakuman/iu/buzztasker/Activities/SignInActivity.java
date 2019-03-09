@@ -1,4 +1,4 @@
-package dragon.bakuman.iu.buzztasker;
+package dragon.bakuman.iu.buzztasker.Activities;
 
 import android.content.Context;
 import android.content.Intent;
@@ -29,6 +29,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.Arrays;
+
+import dragon.bakuman.iu.buzztasker.R;
 
 public class SignInActivity extends AppCompatActivity {
 
