@@ -3,25 +3,37 @@ package dragon.bakuman.iu.buzztasker;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.squareup.picasso.Picasso;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class DriverMainActivity extends AppCompatActivity {
 
 
     private DrawerLayout mDrawerLayout;
+    private SharedPreferences sharedPref;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,6 +76,13 @@ public class DriverMainActivity extends AppCompatActivity {
 
 
                         } else if (id == R.id.nav_logout){
+
+                            logoutToServer(sharedPref.getString("token", ""));
+                            SharedPreferences.Editor editor = sharedPref.edit();
+                            editor.remove("token");
+                            editor.apply();
+
+
                             finishAffinity();
                             Intent intent = new Intent(getApplicationContext(), SignInActivity.class);
                             startActivity(intent);
@@ -78,7 +97,7 @@ public class DriverMainActivity extends AppCompatActivity {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.content_frame, new OrderListFragment()).commit();
 
-        SharedPreferences sharedPref = getSharedPreferences("MY_KEY", Context.MODE_PRIVATE);
+        sharedPref = getSharedPreferences("MY_KEY", Context.MODE_PRIVATE);
 
         View header = navigationView.getHeaderView(0);
         ImageView customer_avatar = (ImageView) header.findViewById(R.id.customer_avatar);
@@ -103,6 +122,49 @@ public class DriverMainActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
+    }
+
+
+    private void logoutToServer(final String token){
+
+        String url = "http://192.168.1.104:8000/api/social/revoke-token";
+
+        StringRequest postRequest = new StringRequest
+                (Request.Method.POST, url, new Response.Listener<String>() {
+
+                    @Override
+                    public void onResponse(String response) {
+
+
+                        Log.d("RESPONSE FROM SERVER", response.toString());
+
+
+                    }
+                }, new Response.ErrorListener() {
+
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // TODO: Handle error
+
+                    }
+                }){
+
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("token", token);
+                params.put("client_id", "I1NXWZxhOxk7eIt33bynLEATh2xbvab6ur8mwiBW");
+                params.put("client_secret", "Li2azL9b4pBTdjCi1utdVK7W7AfgGAkCrfmLNAZtUMJr9pFMTfAb9H8MemsWhgADwPTxtX1BprzN1fPn3KAoxFSxg2AcPZJSXl6EI9NFQnChiHG41g5EIFOUv4JDftdH");
+
+                return params;
+
+            }
+        };
+
+        RequestQueue queue = Volley.newRequestQueue(this);
+        queue.add(postRequest);
+
     }
 
 }

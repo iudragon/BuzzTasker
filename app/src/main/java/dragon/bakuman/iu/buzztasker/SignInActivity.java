@@ -201,7 +201,7 @@ public class SignInActivity extends AppCompatActivity {
         buttonLogin.setClickable(false);
         buttonLogin.setBackgroundColor(getResources().getColor(R.color.colorLightGray));
 
-        String url = "http://192.168.43.25:8000/api/social/convert-token";
+        String url = "http://192.168.1.104:8000/api/social/convert-token";
 
         JSONObject jsonBody = new JSONObject();
         try{
