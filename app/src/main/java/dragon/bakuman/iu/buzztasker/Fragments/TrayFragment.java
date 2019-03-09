@@ -7,13 +7,18 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.ActionBar;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.TableLayout;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -63,7 +68,6 @@ public class TrayFragment extends Fragment {
         listView.setAdapter(adapter);
 
 
-
         Button buttonAddPayment = getActivity().findViewById(R.id.button_add_payment);
         buttonAddPayment.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -75,9 +79,9 @@ public class TrayFragment extends Fragment {
     }
 
     @SuppressLint("StaticFieldLeak")
-    private void listTray(){
+    private void listTray() {
 
-        new AsyncTask<Void, Void, List<Tray>>(){
+        new AsyncTask<Void, Void, List<Tray>>() {
 
             @Override
             protected List<Tray> doInBackground(Void... voids) {
@@ -88,12 +92,36 @@ public class TrayFragment extends Fragment {
             protected void onPostExecute(List<Tray> trays) {
                 super.onPostExecute(trays);
 
-               if (!trays.isEmpty()){
+                if (!trays.isEmpty()) {
 
-                   trayList.clear();
-                   trayList.addAll(trays);
-                   adapter.notifyDataSetChanged();
-               }
+                    trayList.clear();
+                    trayList.addAll(trays);
+                    adapter.notifyDataSetChanged();
+
+                    float total = 0;
+                    for (Tray tray : trays) {
+                        total += tray.getMealQuantity() * tray.getMealPrice();
+
+                    }
+
+                    TextView totalView = getActivity().findViewById(R.id.tray_total);
+                    totalView.setText("Rs." + total);
+
+                } else {
+
+                    TextView alertText = new TextView(getActivity());
+                    alertText.setText("Your tray is empty. Please order a meal");
+                    alertText.setTextSize(17);
+                    alertText.setGravity(Gravity.CENTER);
+                    alertText.setLayoutParams(
+                            new TableLayout.LayoutParams(
+                                    ActionBar.LayoutParams.WRAP_CONTENT,
+                                    ActionBar.LayoutParams.WRAP_CONTENT));
+
+                    LinearLayout linearLayout = getActivity().findViewById(R.id.tray_layout);
+                    linearLayout.removeAllViews();
+                    linearLayout.addView(alertText);
+                }
             }
         }.execute();
 
