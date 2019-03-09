@@ -1,6 +1,7 @@
 package dragon.bakuman.iu.buzztasker;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
@@ -61,6 +62,10 @@ public class CustomerMainActivity extends AppCompatActivity {
 
                         } else if (id == R.id.nav_logout){
 
+                            finishAffinity();
+                            Intent intent = new Intent(getApplicationContext(), SignInActivity.class);
+                            startActivity(intent);
+
 
                         }
 
@@ -94,7 +99,8 @@ public class CustomerMainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-
-
+    @Override
+    public void onBackPressed() {
+    }
 }
 

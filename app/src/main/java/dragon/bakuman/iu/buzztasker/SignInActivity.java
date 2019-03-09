@@ -34,10 +34,12 @@ public class SignInActivity extends AppCompatActivity {
 
     private static final String TAG = "SignInActivity";
 
-    Button customerButton, driverButton;
-    CallbackManager callbackManager;
+    private Button customerButton, driverButton;
+    private CallbackManager callbackManager;
 
-    SharedPreferences sharedPref;
+    private SharedPreferences sharedPref;
+
+    private Button buttonLogin;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,7 +71,7 @@ public class SignInActivity extends AppCompatActivity {
             }
         });
 
-        final Button buttonLogin = findViewById(R.id.button_login_fb);
+        buttonLogin = findViewById(R.id.button_login_fb);
         buttonLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -194,6 +196,10 @@ public class SignInActivity extends AppCompatActivity {
     }
 
     private void loginToServer(String facebookAccessToken, final String userType){
+
+        buttonLogin.setText("LOADING...");
+        buttonLogin.setClickable(false);
+        buttonLogin.setBackgroundColor(getResources().getColor(R.color.colorLightGray));
 
         String url = "http://192.168.43.25:8000/api/social/convert-token";
 
