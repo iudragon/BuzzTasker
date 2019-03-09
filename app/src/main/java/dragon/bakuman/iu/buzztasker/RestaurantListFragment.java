@@ -19,14 +19,23 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.gson.Gson;
 
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.Arrays;
 
 
 /**
  * A simple {@link Fragment} subclass.
  */
 public class RestaurantListFragment extends Fragment {
+
+    ArrayList<Restaurant> restaurantArrayList;
+    private RestaurantAdapter adapter;
 
 
     public RestaurantListFragment() {
@@ -44,36 +53,13 @@ public class RestaurantListFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+
+        restaurantArrayList = new ArrayList<Restaurant>();
+        adapter = new RestaurantAdapter(this.getActivity(), restaurantArrayList);
+
         ListView restaurantListView = getActivity().findViewById(R.id.restaurant_list);
-        restaurantListView.setAdapter(new BaseAdapter() {
-            @Override
-            public int getCount() {
-                return 3;
-            }
 
-            @Override
-            public Object getItem(int position) {
-                return null;
-            }
-
-            @Override
-            public long getItemId(int position) {
-                return 0;
-            }
-
-            @Override
-            public View getView(int position, View convertView, ViewGroup parent) {
-                return LayoutInflater.from(getActivity()).inflate(R.layout.list_item_restaurant, null);
-            }
-        });
-
-        restaurantListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(getContext(), MealListActivity.class);
-                startActivity(intent);
-            }
-        });
+        restaurantListView.setAdapter(adapter);
 
         getRestaurants();
 
@@ -92,6 +78,25 @@ public class RestaurantListFragment extends Fragment {
                     public void onResponse(JSONObject response) {
 
                         Log.d("RESTAURANTS LIST", response.toString());
+
+                        JSONArray restaurantsJSONArray = null;
+                        try {
+
+                            restaurantsJSONArray = response.getJSONArray("restaurants");
+
+                        } catch (JSONException e){
+
+                            e.printStackTrace();
+                        }
+
+                        Gson gson = new Gson();
+                        Restaurant[] restaurants = gson.fromJson(restaurantsJSONArray.toString(), Restaurant[].class);
+
+                        restaurantArrayList.clear();
+                        restaurantArrayList.addAll(new ArrayList<Restaurant>(Arrays.asList(restaurants)));
+                        adapter.notifyDataSetChanged();
+
+
                     }
                 },
                 new Response.ErrorListener() {
