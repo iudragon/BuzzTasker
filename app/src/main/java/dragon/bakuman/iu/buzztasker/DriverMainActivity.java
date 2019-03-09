@@ -127,7 +127,7 @@ public class DriverMainActivity extends AppCompatActivity {
 
     private void logoutToServer(final String token){
 
-        String url = "http://192.168.1.104:8000/api/social/revoke-token";
+        String url = getString(R.string.API_URL) +  "/social/revoke-token";
 
         StringRequest postRequest = new StringRequest
                 (Request.Method.POST, url, new Response.Listener<String>() {
@@ -154,8 +154,8 @@ public class DriverMainActivity extends AppCompatActivity {
 
                 Map<String, String> params = new HashMap<String, String>();
                 params.put("token", token);
-                params.put("client_id", "I1NXWZxhOxk7eIt33bynLEATh2xbvab6ur8mwiBW");
-                params.put("client_secret", "Li2azL9b4pBTdjCi1utdVK7W7AfgGAkCrfmLNAZtUMJr9pFMTfAb9H8MemsWhgADwPTxtX1BprzN1fPn3KAoxFSxg2AcPZJSXl6EI9NFQnChiHG41g5EIFOUv4JDftdH");
+                params.put("client_id",getString(R.string.CLIENT_ID));
+                params.put("client_secret", getString(R.string.CLIENT_SECRET));
 
                 return params;
 

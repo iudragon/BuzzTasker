@@ -201,15 +201,15 @@ public class SignInActivity extends AppCompatActivity {
         buttonLogin.setClickable(false);
         buttonLogin.setBackgroundColor(getResources().getColor(R.color.colorLightGray));
 
-        String url = "http://192.168.1.104:8000/api/social/convert-token";
+        String url = getString(R.string.API_URL) +  "/social/convert-token";
 
         JSONObject jsonBody = new JSONObject();
         try{
 
 
             jsonBody.put("grant_type", "convert_token");
-            jsonBody.put("client_id", "I1NXWZxhOxk7eIt33bynLEATh2xbvab6ur8mwiBW");
-            jsonBody.put("client_secret", "Li2azL9b4pBTdjCi1utdVK7W7AfgGAkCrfmLNAZtUMJr9pFMTfAb9H8MemsWhgADwPTxtX1BprzN1fPn3KAoxFSxg2AcPZJSXl6EI9NFQnChiHG41g5EIFOUv4JDftdH");
+            jsonBody.put("client_id", getString(R.string.CLIENT_ID));
+            jsonBody.put("client_secret", getString(R.string.CLIENT_SECRET));
             jsonBody.put("backend", "facebook");
             jsonBody.put("token", facebookAccessToken);
             jsonBody.put("user_type", userType);
