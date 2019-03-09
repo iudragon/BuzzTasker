@@ -9,7 +9,18 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".CustomerMainActivity"></activity>
+        <activity
+            android:name=".MealListActivity"
+            android:theme="@style/AppTheme.ActionBar"
+            android:parentActivityName=".CustomerMainActivity"
+
+            ></activity>
+
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyCebWlTcZAS_vbBhiLmVOEZfwBkL-Jg7e0" />
+
+        <activity android:name=".CustomerMainActivity" />
         <activity android:name=".SignInActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

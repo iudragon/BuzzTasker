@@ -46,21 +46,39 @@ public class CustomerMainActivity extends AppCompatActivity {
                     @Override
                     public boolean onNavigationItemSelected(MenuItem menuItem) {
 
-                        menuItem.setChecked(true);
-
                         // close drawer when item is tapped
                         mDrawerLayout.closeDrawers();
 
                         // Add code here to update the UI based on the item selected
                         // For example, swap UI fragments here
 
+                        int id = menuItem.getItemId();
+                        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+                        if (id == R.id.nav_restaurant){
+
+                            transaction.replace(R.id.content_frame, new RestaurantListFragment()).commit();
+                        } else if (id == R.id.nav_tray){
+                            transaction.replace(R.id.content_frame, new TrayFragment()).commit();
+
+                        } else if (id == R.id.nav_order){
+                            transaction.replace(R.id.content_frame, new OrderFragment()).commit();
+
+
+                        } else if (id == R.id.nav_logout){
+
+
+                        }
 
                         return true;
                     }
                 });
 
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
 
-    }
+        transaction.replace(R.id.content_frame, new RestaurantListFragment()).commit();
+
+
+        }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
