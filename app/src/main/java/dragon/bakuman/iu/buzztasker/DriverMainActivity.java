@@ -1,5 +1,7 @@
 package dragon.bakuman.iu.buzztasker;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
@@ -9,6 +11,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+import com.squareup.picasso.Picasso;
 
 public class DriverMainActivity extends AppCompatActivity {
 
@@ -66,6 +73,15 @@ public class DriverMainActivity extends AppCompatActivity {
 
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.content_frame, new OrderListFragment()).commit();
+
+        SharedPreferences sharedPref = getSharedPreferences("MY_KEY", Context.MODE_PRIVATE);
+
+        View header = navigationView.getHeaderView(0);
+        ImageView customer_avatar = (ImageView) header.findViewById(R.id.customer_avatar);
+        TextView customer_name = header.findViewById(R.id.customer_name);
+
+        customer_name.setText(sharedPref.getString("name", ""));
+        Picasso.with(this).load(sharedPref.getString("avatar", "")).transform(new CircleTransform()).into(customer_avatar);
 
 
     }

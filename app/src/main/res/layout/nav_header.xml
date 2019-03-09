@@ -21,7 +21,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="15dp"
         android:layout_weight="1"
-        android:text="Agradoot"
+        android:text="Leo Trieu"
         android:textColor="@android:color/white"
         android:textSize="17sp"
         android:textStyle="bold" />
