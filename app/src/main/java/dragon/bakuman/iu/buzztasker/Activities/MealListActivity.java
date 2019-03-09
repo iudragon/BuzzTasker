@@ -26,10 +26,15 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import dragon.bakuman.iu.buzztasker.Adapters.MealAdapter;
+import dragon.bakuman.iu.buzztasker.Objects.Meal;
 import dragon.bakuman.iu.buzztasker.Objects.Restaurant;
 import dragon.bakuman.iu.buzztasker.R;
 
 public class MealListActivity extends AppCompatActivity {
+
+    private ArrayList<Meal> mealArrayList;
+    private MealAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,36 +47,14 @@ public class MealListActivity extends AppCompatActivity {
 
         getSupportActionBar().setTitle(restaurantName);
 
+        mealArrayList = new ArrayList<Meal>();
+        adapter = new MealAdapter(this, mealArrayList, restaurantId );
+
+
+
         ListView listView = findViewById(R.id.meal_list);
-        listView.setAdapter(new BaseAdapter() {
-            @Override
-            public int getCount() {
-                return 3;
-            }
+        listView.setAdapter(adapter);
 
-            @Override
-            public Object getItem(int position) {
-                return null;
-            }
-
-            @Override
-            public long getItemId(int position) {
-                return 0;
-            }
-
-            @Override
-            public View getView(int position, View convertView, ViewGroup parent) {
-                return LayoutInflater.from(MealListActivity.this).inflate(R.layout.list_item_meal, null);
-            }
-        });
-
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(MealListActivity.this, MealDetailActivity.class);
-                startActivity(intent);
-            }
-        });
 
         getMeals(restaurantId);
     }
@@ -89,6 +72,22 @@ public class MealListActivity extends AppCompatActivity {
                     public void onResponse(JSONObject response) {
 
                         Log.d("MEAL LIST", response.toString());
+
+                        JSONArray mealsJSONArray = null;
+                        try {
+
+                            mealsJSONArray = response.getJSONArray("meals");
+
+                        } catch (JSONException e) {
+
+                            e.printStackTrace();
+                        }
+
+                        Gson gson = new Gson();
+                        Meal[] meals = gson.fromJson(mealsJSONArray.toString(), Meal[].class);
+                        mealArrayList.clear();
+                        mealArrayList.addAll(new ArrayList<Meal>(Arrays.asList(meals)));
+                        adapter.notifyDataSetChanged();
 
                     }
                 },
