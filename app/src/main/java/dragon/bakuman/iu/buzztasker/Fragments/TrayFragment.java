@@ -1,10 +1,13 @@
 package dragon.bakuman.iu.buzztasker.Fragments;
 
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,7 +15,13 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import dragon.bakuman.iu.buzztasker.Activities.PaymentActivity;
+import dragon.bakuman.iu.buzztasker.Adapters.TrayAdapter;
+import dragon.bakuman.iu.buzztasker.AppDatabase;
+import dragon.bakuman.iu.buzztasker.Objects.Tray;
 import dragon.bakuman.iu.buzztasker.R;
 
 
@@ -21,6 +30,10 @@ import dragon.bakuman.iu.buzztasker.R;
  */
 public class TrayFragment extends Fragment {
 
+    private ArrayList<Tray> trayList;
+    private TrayAdapter adapter;
+
+    private AppDatabase db;
 
     public TrayFragment() {
         // Required empty public constructor
@@ -38,28 +51,18 @@ public class TrayFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
+        db = AppDatabase.getAppDatabase(getContext());
+        listTray();
+
+
+        trayList = new ArrayList<Tray>();
+        adapter = new TrayAdapter(this.getActivity(), trayList);
+
+
         ListView listView = getActivity().findViewById(R.id.tray_list);
-        listView.setAdapter(new BaseAdapter() {
-            @Override
-            public int getCount() {
-                return 4;
-            }
+        listView.setAdapter(adapter);
 
-            @Override
-            public Object getItem(int position) {
-                return null;
-            }
 
-            @Override
-            public long getItemId(int position) {
-                return 0;
-            }
-
-            @Override
-            public View getView(int position, View convertView, ViewGroup parent) {
-                return LayoutInflater.from(getActivity()).inflate(R.layout.list_item_tray, null);
-            }
-        });
 
         Button buttonAddPayment = getActivity().findViewById(R.id.button_add_payment);
         buttonAddPayment.setOnClickListener(new View.OnClickListener() {
@@ -69,5 +72,30 @@ public class TrayFragment extends Fragment {
                 startActivity(intent);
             }
         });
+    }
+
+    @SuppressLint("StaticFieldLeak")
+    private void listTray(){
+
+        new AsyncTask<Void, Void, List<Tray>>(){
+
+            @Override
+            protected List<Tray> doInBackground(Void... voids) {
+                return db.trayDao().getAll();
+            }
+
+            @Override
+            protected void onPostExecute(List<Tray> trays) {
+                super.onPostExecute(trays);
+
+               if (!trays.isEmpty()){
+
+                   trayList.clear();
+                   trayList.addAll(trays);
+                   adapter.notifyDataSetChanged();
+               }
+            }
+        }.execute();
+
     }
 }
