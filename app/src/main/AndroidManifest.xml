@@ -10,11 +10,14 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".MealListActivity"
-            android:theme="@style/AppTheme.ActionBar"
-            android:parentActivityName=".CustomerMainActivity"
+            android:name=".MealDetailActivity"
 
-            ></activity>
+            android:parentActivityName=".MealListActivity"
+            android:theme="@style/AppTheme.ActionBar" />
+        <activity
+            android:name=".MealListActivity"
+            android:parentActivityName=".CustomerMainActivity"
+            android:theme="@style/AppTheme.ActionBar" />
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
