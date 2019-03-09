@@ -5,12 +5,15 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.EditText;
 import android.widget.ListView;
 
 import com.android.volley.Request;
@@ -34,8 +37,9 @@ import java.util.Arrays;
  */
 public class RestaurantListFragment extends Fragment {
 
-    ArrayList<Restaurant> restaurantArrayList;
+    private ArrayList<Restaurant> restaurantArrayList;
     private RestaurantAdapter adapter;
+    private Restaurant[] restaurants = new Restaurant[]{};
 
 
     public RestaurantListFragment() {
@@ -63,6 +67,8 @@ public class RestaurantListFragment extends Fragment {
 
         getRestaurants();
 
+        addSearchFunction();
+
     }
 
     private void getRestaurants() {
@@ -84,13 +90,13 @@ public class RestaurantListFragment extends Fragment {
 
                             restaurantsJSONArray = response.getJSONArray("restaurants");
 
-                        } catch (JSONException e){
+                        } catch (JSONException e) {
 
                             e.printStackTrace();
                         }
 
                         Gson gson = new Gson();
-                        Restaurant[] restaurants = gson.fromJson(restaurantsJSONArray.toString(), Restaurant[].class);
+                        restaurants = gson.fromJson(restaurantsJSONArray.toString(), Restaurant[].class);
 
                         restaurantArrayList.clear();
                         restaurantArrayList.addAll(new ArrayList<Restaurant>(Arrays.asList(restaurants)));
@@ -109,5 +115,39 @@ public class RestaurantListFragment extends Fragment {
         RequestQueue queue = Volley.newRequestQueue(getActivity());
         queue.add(jsonObjectRequest);
 
+    }
+
+    private void addSearchFunction(){
+
+        EditText searchInput = getActivity().findViewById(R.id.res_search);
+        searchInput.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int start, int before, int count) {
+
+                Log.d("SEARCH", charSequence.toString());
+
+                restaurantArrayList.clear();
+                for (Restaurant restaurant : restaurants){
+
+                    if (restaurant.getName().toLowerCase().contains(charSequence.toString().toLowerCase())){
+
+                        restaurantArrayList.add(restaurant);
+
+                    }
+                }
+
+                adapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
     }
 }
