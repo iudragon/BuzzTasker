@@ -4,9 +4,7 @@
     <string name="fb_login_protocol_scheme">fb410357169738614</string>
 
 
-    <string name="API_URL">http://10.0.0.5:8000/api</string>
-    <string name="CLIENT_ID">tVs0Jfp851wTS9YeZKSi40U78jmzgpw2Hbh121iJ</string>
-    <string name="CLIENT_SECRET">ZqAjODgInznH8nUymREcW8JlQgJeaVo84k2ct7GpmBTahUK6ljrOCMf34mARt3gBaw5Fd07z5Iw0y4yvS8N2Nvwc7pbr1g2Zd9bhEDgQEzXUJr9ZDwC4MtZKJSiTZSZ2</string>
+
 
     <string name="title_activity_customer_main">CustomerMainActivity</string>
 
