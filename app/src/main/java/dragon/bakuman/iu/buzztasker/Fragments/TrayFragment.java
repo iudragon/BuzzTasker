@@ -104,16 +104,6 @@ public class TrayFragment extends Fragment implements OnMapReadyCallback {
         ListView listView = getActivity().findViewById(R.id.tray_list);
         listView.setAdapter(adapter);
 
-
-        Button buttonAddPayment = getActivity().findViewById(R.id.button_add_payment);
-        buttonAddPayment.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getContext(), PaymentActivity.class);
-                startActivity(intent);
-            }
-        });
-
         // Construct a FusedLocationProviderClient.
         mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(getActivity());
 
@@ -124,6 +114,8 @@ public class TrayFragment extends Fragment implements OnMapReadyCallback {
         address = getActivity().findViewById(R.id.tray_address);
 
         handleMapAddress();
+
+        handleAddPayment();
 
     }
 
@@ -315,4 +307,28 @@ public class TrayFragment extends Fragment implements OnMapReadyCallback {
             }
         });
     }
+
+    private void handleAddPayment(){
+
+        Button buttonAddPayment = getActivity().findViewById(R.id.button_add_payment);
+        buttonAddPayment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if (address.getText().toString().equals("")){
+
+                    address.setError("Address cannot be blank");
+
+                } else {
+
+                    Intent intent = new Intent(getContext(), PaymentActivity.class);
+                    startActivity(intent);
+                }
+
+
+            }
+        });
+
+    }
+
 }
