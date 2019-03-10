@@ -70,17 +70,17 @@ public class CustomerMainActivity extends AppCompatActivity {
 
                         int id = menuItem.getItemId();
                         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-                        if (id == R.id.nav_restaurant){
+                        if (id == R.id.nav_restaurant) {
 
                             transaction.replace(R.id.content_frame, new RestaurantListFragment()).commit();
-                        } else if (id == R.id.nav_tray){
+                        } else if (id == R.id.nav_tray) {
                             transaction.replace(R.id.content_frame, new TrayFragment()).commit();
 
-                        } else if (id == R.id.nav_order){
+                        } else if (id == R.id.nav_order) {
                             transaction.replace(R.id.content_frame, new OrderFragment()).commit();
 
 
-                        } else if (id == R.id.nav_logout){
+                        } else if (id == R.id.nav_logout) {
 
                             logoutToServer(sharedPref.getString("token", ""));
                             SharedPreferences.Editor editor = sharedPref.edit();
@@ -102,12 +102,19 @@ public class CustomerMainActivity extends AppCompatActivity {
         Intent intent = getIntent();
         String screen = intent.getStringExtra("screen");
 
-        if (Objects.equals(screen, "tray")){
+        if (Objects.equals(screen, "tray")) {
 
 
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
 
             transaction.replace(R.id.content_frame, new TrayFragment()).commit();
+
+        } else if (Objects.equals(screen, "order")) {
+
+
+            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+
+            transaction.replace(R.id.content_frame, new OrderFragment()).commit();
 
         } else {
 
@@ -128,7 +135,7 @@ public class CustomerMainActivity extends AppCompatActivity {
         Picasso.with(this).load(sharedPref.getString("avatar", "")).transform(new CircleTransform()).into(customer_avatar);
 
 
-        }
+    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -144,9 +151,9 @@ public class CustomerMainActivity extends AppCompatActivity {
     public void onBackPressed() {
     }
 
-    private void logoutToServer(final String token){
+    private void logoutToServer(final String token) {
 
-        String url = getString(R.string.API_URL) +  "/social/revoke-token";
+        String url = getString(R.string.API_URL) + "/social/revoke-token";
 
         StringRequest postRequest = new StringRequest
                 (Request.Method.POST, url, new Response.Listener<String>() {
@@ -166,7 +173,7 @@ public class CustomerMainActivity extends AppCompatActivity {
                         // TODO: Handle error
 
                     }
-                 }){
+                }) {
 
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {

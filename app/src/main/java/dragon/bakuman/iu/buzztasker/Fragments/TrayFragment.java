@@ -41,9 +41,11 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.gson.Gson;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import dragon.bakuman.iu.buzztasker.Activities.PaymentActivity;
@@ -322,6 +324,24 @@ public class TrayFragment extends Fragment implements OnMapReadyCallback {
                 } else {
 
                     Intent intent = new Intent(getContext(), PaymentActivity.class);
+
+                    intent.putExtra("restaurantId", trayList.get(0).getRestaurantId());
+                    intent.putExtra("address", address.getText().toString());
+
+
+                    ArrayList<HashMap<String, Integer>> orderDetails = new ArrayList<>();
+
+                    for (Tray tray : trayList){
+
+                        HashMap<String, Integer> map = new HashMap<>();
+                        map.put("meal_id", Integer.parseInt(tray.getMealId()));
+                        map.put("quantity", tray.getMealQuantity());
+                        orderDetails.add(map);
+
+                    }
+
+                    intent.putExtra("orderDetails", new Gson().toJson(orderDetails));
+
                     startActivity(intent);
                 }
 
